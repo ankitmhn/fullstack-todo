@@ -1,0 +1,118 @@
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { create, edit, remove, toggleVisible } from "./todoSlice";
+
+export function Todo() {
+  const dispatch = useDispatch();
+  const [titleText, setTitleText] = useState("");
+  const [descText, setDescText] = useState("");
+  const [editingTodo, setEditingTodo] = useState(null);
+  const todos = useSelector(state => state.todos);
+
+  const handleTodoSubmit = e => {
+    e.preventDefault();
+    if (editingTodo) {
+      console.log("Handling edit..");
+      dispatch(
+        edit({ ...editingTodo, title: titleText, description: descText })
+      );
+      setEditingTodo(null);
+    } else dispatch(create({ title: titleText, description: descText }));
+
+    setTitleText("");
+    setDescText("");
+  };
+
+  const handleToDoEdit = editTodo => {
+    setTitleText(editTodo.title);
+    setDescText(editTodo.description);
+    setEditingTodo(editTodo);
+    console.log("Edit: ", editTodo);
+  };
+
+  const handleTodoRemove = todoId => {
+    dispatch(remove(todoId));
+    console.log("Remove: ", todoId);
+  };
+  return (
+    <section className="section">
+      <div className="container">
+        <span className="section is-size-2 ">
+          {editingTodo ? <p>Edit todo:</p> : <p>Create todo:</p>}
+        </span>
+        <form onSubmit={handleTodoSubmit} className="columns ">
+          <input
+            value={titleText}
+            className="column"
+            placeholder="Title"
+            onChange={e => setTitleText(e.target.value)}
+          />
+          <input
+            className="column"
+            placeholder="Description..."
+            value={descText}
+            onChange={e => setDescText(e.target.value)}
+          />
+          <button className="column" type="submit">
+            {editingTodo ? "Save Edits" : "Add todo"}
+          </button>
+        </form>
+        {todos.length ? (
+          <span className="section is-pulled-left">
+            Showing {todos.length > 10 ? 10 : todos.length} of {todos.length}{" "}
+            todos below: <br />
+          </span>
+        ) : null}
+        <div className="section columns is-multiline is-5">
+          {todos.slice(0, 9).map(todo => {
+            return (
+              <div key={todo.id}>
+                <div className="column">
+                  <div className="card card-header-title">
+                    {todo.title}
+                    <a
+                      href="#"
+                      className="button card-header-icon is-white"
+                      aria-label="more details"
+                      onClick={() => {
+                        dispatch(toggleVisible(todo.id));
+                      }}
+                    >
+                      <span className="icon">
+                        <i className="fas fa-angle-down" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </div>
+                  {todo.visible && (
+                    <>
+                      <div className="card-content ">
+                        <div className="content">{todo.description}</div>
+                      </div>
+                      <footer className="card-footer">
+                        <button
+                          className="button is-flex flex-grow"
+                          onClick={() => handleToDoEdit(todo)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="button is-danger is-inverted is-flex flex-grow"
+                          onClick={() => handleTodoRemove(todo.id)}
+                        >
+                          Delete
+                        </button>
+                      </footer>
+                    </>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Todo;
