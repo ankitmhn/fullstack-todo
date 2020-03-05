@@ -38,6 +38,7 @@ export function Todo() {
   return (
     <section className="section">
       <div className="container">
+        {/** Section handles creating and editing todos */}
         <span className="section is-size-2 ">
           {editingTodo ? <p>Editing todo:</p> : <p>Create todo:</p>}
         </span>
@@ -65,6 +66,7 @@ export function Todo() {
           </span>
         ) : null}
         <div className="section columns is-multiline is-5">
+          {/** Only 10 todos to be displayed at once - better implementation with pagination*/}
           {todos.slice(0, 10).map(todo => {
             return (
               <div key={todo.id}>
