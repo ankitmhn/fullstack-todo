@@ -28,18 +28,18 @@ export function Todo() {
     setTitleText(editTodo.title);
     setDescText(editTodo.description);
     setEditingTodo(editTodo);
-    console.log("Edit: ", editTodo);
+    // console.log("Edit: ", editTodo);
   };
 
   const handleTodoRemove = todoId => {
     dispatch(remove(todoId));
-    console.log("Remove: ", todoId);
+    // console.log("Remove: ", todoId);
   };
   return (
     <section className="section">
       <div className="container">
         <span className="section is-size-2 ">
-          {editingTodo ? <p>Edit todo:</p> : <p>Create todo:</p>}
+          {editingTodo ? <p>Editing todo:</p> : <p>Create todo:</p>}
         </span>
         <form onSubmit={handleTodoSubmit} className="columns ">
           <input
@@ -59,13 +59,13 @@ export function Todo() {
           </button>
         </form>
         {todos.length ? (
-          <span className="section is-pulled-left">
-            Showing {todos.length > 10 ? 10 : todos.length} of {todos.length}{" "}
-            todos below: <br />
+          <span className="container">
+            Showing <b>{todos.length > 10 ? 10 : todos.length}</b> of{" "}
+            <b>{todos.length}</b> todos below: <br />
           </span>
         ) : null}
         <div className="section columns is-multiline is-5">
-          {todos.slice(0, 9).map(todo => {
+          {todos.slice(0, 10).map(todo => {
             return (
               <div key={todo.id}>
                 <div className="column">
