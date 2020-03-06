@@ -19,7 +19,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "nodemon ./server/server",
-    "dev": "npm-run-all -l -p start serve"
+    "dev": "npm-run-all -l -p start serve",
+    "postinstall": "cd server && npm install"
   },
   "eslintConfig": {
     "extends": "react-app"
