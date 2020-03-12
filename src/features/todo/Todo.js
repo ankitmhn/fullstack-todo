@@ -1,24 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { create, edit, remove, toggleVisible } from "./todoSlice";
+import {
+  createTodo,
+  editTodo,
+  deleteTodo,
+  toggleVisible,
+  getAllTodos
+} from "./todoSlice";
 
 export function Todo() {
   const dispatch = useDispatch();
   const [titleText, setTitleText] = useState("");
   const [descText, setDescText] = useState("");
   const [editingTodo, setEditingTodo] = useState(null);
-  const todos = useSelector(state => state.todos);
+  const todos = useSelector(state => state.todos.list);
 
+  useEffect(() => {
+    dispatch(getAllTodos());
+  }, [todos.length, dispatch]);
   const handleTodoSubmit = e => {
     e.preventDefault();
     if (editingTodo) {
       console.log("Handling edit..");
       dispatch(
-        edit({ ...editingTodo, title: titleText, description: descText })
+        editTodo({ ...editingTodo, title: titleText, description: descText })
       );
       setEditingTodo(null);
-    } else dispatch(create({ title: titleText, description: descText }));
+    } else {
+      let id = todos.reduce((max, obj) => {
+        return max.id > obj.id ? max.id : obj.id;
+      }, 0);
+      id++;
+      dispatch(createTodo({ title: titleText, description: descText, id }));
+    }
 
     setTitleText("");
     setDescText("");
@@ -32,7 +47,7 @@ export function Todo() {
   };
 
   const handleTodoRemove = todoId => {
-    dispatch(remove(todoId));
+    dispatch(deleteTodo(todoId));
     // console.log("Remove: ", todoId);
   };
   return (
