@@ -8,7 +8,7 @@ On the server, the API is secured using the bearer token strategy that is implem
 
 In the project directory, you can run:
 
-### `npm install'
+### `npm install`
 
 to install all the dependancies for the front end and the server.
 

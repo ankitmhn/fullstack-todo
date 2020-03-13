@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import TodoCard from "./TodoCard";
 
 import {
   createTodo,
@@ -9,7 +10,7 @@ import {
   getAllTodos
 } from "./todoSlice";
 
-export function Todo() {
+export function TodoControl() {
   const dispatch = useDispatch();
   const [titleText, setTitleText] = useState("");
   const [descText, setDescText] = useState("");
@@ -84,46 +85,13 @@ export function Todo() {
           {/** Only 10 todos to be displayed at once - better implementation with pagination*/}
           {todos.slice(0, 10).map(todo => {
             return (
-              <div key={todo.id}>
-                <div className="column">
-                  <div className="card card-header-title">
-                    {todo.title}
-                    <a
-                      href="#"
-                      className="button card-header-icon is-white"
-                      aria-label="more details"
-                      onClick={() => {
-                        dispatch(toggleVisible(todo.id));
-                      }}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-angle-down" aria-hidden="true"></i>
-                      </span>
-                    </a>
-                  </div>
-                  {todo.visible && (
-                    <>
-                      <div className="card-content ">
-                        <div className="content">{todo.description}</div>
-                      </div>
-                      <footer className="card-footer">
-                        <button
-                          className="button is-flex flex-grow"
-                          onClick={() => handleToDoEdit(todo)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="button is-danger is-inverted is-flex flex-grow"
-                          onClick={() => handleTodoRemove(todo.id)}
-                        >
-                          Delete
-                        </button>
-                      </footer>
-                    </>
-                  )}
-                </div>
-              </div>
+              <TodoCard
+                key={todo.id}
+                todo={todo}
+                onExpand={() => dispatch(toggleVisible(todo.id))}
+                onEdit={handleToDoEdit}
+                onDelete={handleTodoRemove}
+              />
             );
           })}
         </div>
@@ -132,4 +100,4 @@ export function Todo() {
   );
 }
 
-export default Todo;
+export default TodoControl;

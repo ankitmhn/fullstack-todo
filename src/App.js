@@ -1,10 +1,10 @@
 import React from "react";
-import Todo from "./features/todo/Todo";
+import TodoPage from "./features/todo/TodoControl";
 
 function App() {
   return (
     <div className="container">
-      <Todo />
+      <TodoPage />
     </div>
   );
 }
